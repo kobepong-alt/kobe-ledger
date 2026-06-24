@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#f7f4ee" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Kobe的账本" />
+    <title>Kobe的账本</title>
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="apple-touch-icon" href="./icon.svg" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div id="app" class="app-shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">本地记账</p>
+          <h1>Kobe的账本</h1>
+          <p class="version-label">v1.11</p>
+        </div>
+        <button class="icon-button" id="exportJsonButton" type="button" title="导出 JSON" aria-label="导出 JSON">
+          <span aria-hidden="true">↓</span>
+        </button>
+      </header>
+
+      <main>
+        <section class="toolbar" aria-label="账本和月份">
+          <label>
+            <span>账本</span>
+            <select id="ledgerSelect"></select>
+          </label>
+          <label>
+            <span>月份</span>
+            <input id="monthFilter" type="month" />
+            <small id="monthLedgerSpend" class="helper-text">该月该账本支出 ¥0.00</small>
+          </label>
+          <button id="newLedgerButton" type="button">新账本</button>
+          <button id="deleteLedgerButton" type="button">删账本</button>
+        </section>
+
+        <section class="entry-layout">
+          <form id="entryForm" class="entry-panel" autocomplete="off">
+            <div class="panel-title">
+              <h2>记一笔</h2>
+              <div class="segmented-control" role="group" aria-label="收支类型">
+                <button class="active" id="expenseTypeButton" type="button" data-type="expense">支出</button>
+                <button id="incomeTypeButton" type="button" data-type="income">收入</button>
+              </div>
+            </div>
+
+            <label class="amount-field">
+              <span>金额</span>
+              <input id="amountInput" type="number" inputmode="decimal" min="0.01" step="0.01" placeholder="0.00" required />
+            </label>
+
+            <div>
+              <span class="field-label">分类</span>
+              <div id="categoryGrid" class="category-grid"></div>
+            </div>
+
+            <div class="two-col">
+              <label>
+                <span>日期</span>
+                <input id="dateInput" type="date" required />
+              </label>
+              <label>
+                <span>账本</span>
+                <select id="entryLedgerSelect"></select>
+              </label>
+            </div>
+
+            <label>
+              <span>备注</span>
+              <input id="noteInput" type="text" maxlength="80" placeholder="例如午餐、地铁、工资" />
+            </label>
+
+            <button class="primary-button" type="submit">保存记录</button>
+          </form>
+
+          <section class="chart-panel" aria-label="支出统计">
+            <div class="panel-title">
+              <h2 id="categoryChartTitle">支出去向</h2>
+              <span id="chartHint">按分类统计</span>
+            </div>
+            <canvas id="categoryChart" width="220" height="220" data-chart-height="220"></canvas>
+            <div id="categoryLegend" class="legend"></div>
+          </section>
+        </section>
+
+        <section class="summary-band" aria-label="本月概览">
+          <div class="balance-card">
+            <span>本月支出</span>
+            <strong id="monthExpense">¥0.00</strong>
+          </div>
+          <div class="metric-row">
+            <div>
+              <span>收入</span>
+              <strong id="monthIncome">¥0.00</strong>
+            </div>
+            <div>
+              <span>结余</span>
+              <strong id="monthBalance">¥0.00</strong>
+            </div>
+          </div>
+        </section>
+
+        <section class="trend-section" aria-label="月度趋势">
+          <div class="panel-title">
+            <h2 id="trendChartTitle">月度趋势</h2>
+            <span id="trendChartHint">最近 6 个月</span>
+          </div>
+          <canvas id="trendChart" width="360" height="150" data-chart-height="150"></canvas>
+          <div id="trendLegend" class="legend trend-legend"></div>
+        </section>
+
+        <section class="records-section" aria-label="流水记录">
+          <div class="panel-title">
+            <h2>流水</h2>
+            <div class="actions">
+              <button id="exportCsvButton" type="button">导出 CSV</button>
+              <button id="importButton" type="button">导入 JSON</button>
+            </div>
+          </div>
+          <input id="importInput" type="file" accept="application/json,.json" hidden />
+          <div id="recordList" class="record-list"></div>
+        </section>
+      </main>
+
+      <div id="ledgerDialog" class="dialog-backdrop" hidden>
+        <form id="ledgerForm" class="dialog" autocomplete="off">
+          <h2>新建账本</h2>
+          <label>
+            <span>名称</span>
+            <input id="ledgerNameInput" type="text" maxlength="24" placeholder="例如 旅行、家庭、公司报销" required />
+          </label>
+          <div class="dialog-actions">
+            <button id="cancelLedgerButton" type="button">取消</button>
+            <button class="primary-button" type="submit">创建</button>
+          </div>
+        </form>
+      </div>
+
+      <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+    </div>
+
+    <script src="./app.js" type="module"></script>
+  </body>
+</html>
