@@ -1,0 +1,637 @@
+:root {
+  color-scheme: light;
+  --bg: #f7f4ee;
+  --surface: #fffdfa;
+  --surface-strong: #ffffff;
+  --ink: #22201c;
+  --muted: #726b61;
+  --line: #e5ded2;
+  --brand: #2f6f73;
+  --brand-strong: #20585c;
+  --accent: #d88d4a;
+  --income: #2f7d52;
+  --expense: #bf4b45;
+  --shadow: 0 18px 45px rgba(53, 45, 35, 0.12);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  min-width: 320px;
+  margin: 0;
+  background:
+    linear-gradient(180deg, rgba(47, 111, 115, 0.1), transparent 280px),
+    var(--bg);
+  color: var(--ink);
+}
+
+button,
+input,
+select {
+  font: inherit;
+  font-size: 16px;
+  min-width: 0;
+}
+
+button {
+  min-height: 44px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--surface-strong);
+  color: var(--ink);
+  cursor: pointer;
+}
+
+button:active {
+  transform: translateY(1px);
+}
+
+input,
+select {
+  width: 100%;
+  max-width: 100%;
+  min-height: 46px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface-strong);
+  color: var(--ink);
+  padding: 0 12px;
+  outline: none;
+}
+
+input[type="date"],
+input[type="month"] {
+  -webkit-appearance: none;
+  appearance: none;
+  overflow: hidden;
+}
+
+input:focus,
+select:focus {
+  border-color: var(--brand);
+  box-shadow: 0 0 0 3px rgba(47, 111, 115, 0.14);
+}
+
+label {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 650;
+}
+
+label span,
+.field-label {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.app-shell {
+  width: min(1180px, 100%);
+  min-height: 100svh;
+  margin: 0 auto;
+  padding: max(18px, env(safe-area-inset-top)) 16px calc(28px + env(safe-area-inset-bottom));
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.eyebrow {
+  margin: 0 0 4px;
+  color: var(--brand);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.version-label {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 750;
+}
+
+h1,
+h2 {
+  margin: 0;
+  letter-spacing: 0;
+}
+
+h1 {
+  font-size: clamp(30px, 8vw, 50px);
+  line-height: 1;
+}
+
+h2 {
+  font-size: 18px;
+}
+
+.icon-button {
+  width: 46px;
+  min-width: 46px;
+  padding: 0;
+  border: 1px solid var(--line);
+  box-shadow: 0 8px 24px rgba(45, 35, 22, 0.08);
+  font-size: 24px;
+}
+
+.summary-band {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(260px, 0.7fr);
+  gap: 12px;
+  margin: 14px 0;
+}
+
+.balance-card,
+.metric-row,
+.entry-panel,
+.chart-panel,
+.trend-section,
+.records-section,
+.dialog {
+  border: 1px solid rgba(229, 222, 210, 0.88);
+  border-radius: 8px;
+  background: rgba(255, 253, 250, 0.92);
+  box-shadow: var(--shadow);
+}
+
+.balance-card {
+  min-height: 132px;
+  display: grid;
+  align-content: end;
+  gap: 10px;
+  padding: 24px;
+  background:
+    linear-gradient(135deg, rgba(47, 111, 115, 0.16), rgba(216, 141, 74, 0.12)),
+    var(--surface);
+}
+
+.balance-card span,
+.metric-row span {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 750;
+}
+
+.balance-card strong {
+  font-size: clamp(34px, 12vw, 58px);
+  line-height: 1;
+  color: var(--expense);
+}
+
+.metric-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  overflow: hidden;
+  background: var(--line);
+}
+
+.metric-row > div {
+  display: grid;
+  align-content: end;
+  gap: 10px;
+  min-height: 132px;
+  padding: 20px;
+  background: var(--surface);
+}
+
+.helper-text {
+  display: block;
+  margin-top: -2px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.metric-row strong {
+  font-size: clamp(20px, 6vw, 30px);
+}
+
+#monthIncome {
+  color: var(--income);
+}
+
+.toolbar {
+  display: grid;
+  grid-template-columns: 1fr 170px auto auto;
+  gap: 10px;
+  align-items: end;
+  margin-bottom: 14px;
+}
+
+.toolbar > * {
+  min-width: 0;
+}
+
+.toolbar button,
+.actions button,
+.dialog-actions button,
+.record-delete {
+  border: 1px solid var(--line);
+  padding: 0 14px;
+  font-weight: 760;
+}
+
+.entry-layout {
+  display: grid;
+  grid-template-columns: minmax(320px, 0.85fr) minmax(320px, 1fr);
+  gap: 14px;
+  align-items: start;
+}
+
+.entry-panel,
+.chart-panel,
+.trend-section,
+.records-section {
+  padding: 16px;
+}
+
+.panel-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.panel-title span {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.segmented-control {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: 118px;
+  min-height: 32px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 2px;
+  background: #f1ece3;
+}
+
+.segmented-control button {
+  min-height: 26px;
+  padding: 0 8px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.segmented-control button.active {
+  background: var(--surface-strong);
+  color: var(--ink);
+  box-shadow: 0 5px 14px rgba(45, 35, 22, 0.1);
+}
+
+.income-ledger-mode #expenseTypeButton {
+  display: none;
+}
+
+.expense-ledger-mode #incomeTypeButton {
+  display: none;
+}
+
+.income-ledger-mode .segmented-control,
+.expense-ledger-mode .segmented-control {
+  grid-template-columns: 1fr;
+  width: 58px;
+}
+
+.entry-panel {
+  display: grid;
+  gap: 14px;
+}
+
+.amount-field input {
+  height: 58px;
+  font-size: 28px;
+  font-weight: 800;
+}
+
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.category-grid button {
+  display: grid;
+  place-items: center;
+  min-height: 46px;
+  border: 1px solid var(--line);
+  padding: 0 6px;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 780;
+  overflow-wrap: anywhere;
+}
+
+.category-grid button.active {
+  border-color: var(--brand);
+  background: rgba(47, 111, 115, 0.12);
+  color: var(--brand-strong);
+}
+
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.two-col > * {
+  min-width: 0;
+}
+
+.primary-button {
+  background: var(--brand);
+  color: #fff;
+  font-weight: 850;
+  box-shadow: 0 12px 28px rgba(47, 111, 115, 0.24);
+}
+
+.primary-button:hover {
+  background: var(--brand-strong);
+}
+
+.chart-panel canvas,
+.trend-section canvas {
+  display: block;
+  min-height: 0;
+}
+
+.chart-panel canvas {
+  width: min(100%, 220px);
+  height: 220px;
+  margin: 0 auto;
+}
+
+.trend-section canvas {
+  width: 100%;
+  height: 150px;
+}
+
+.legend {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.trend-legend {
+  margin-top: 8px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.legend-dot {
+  width: 10px;
+  height: 10px;
+  flex: 0 0 auto;
+  border-radius: 999px;
+}
+
+.trend-section,
+.records-section {
+  margin-top: 14px;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+}
+
+.record-list {
+  display: grid;
+  gap: 8px;
+}
+
+.record-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: center;
+  min-height: 66px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface-strong);
+  padding: 12px;
+}
+
+.record-main {
+  min-width: 0;
+}
+
+.record-title {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 4px;
+  font-weight: 850;
+}
+
+.record-title span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.record-meta {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 650;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.record-amount {
+  text-align: right;
+  font-weight: 900;
+}
+
+.record-amount.expense {
+  color: var(--expense);
+}
+
+.record-amount.income {
+  color: var(--income);
+}
+
+.record-delete {
+  min-width: 44px;
+  padding: 0 10px;
+  color: var(--muted);
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.48;
+  transform: none;
+}
+
+.empty-state {
+  display: grid;
+  place-items: center;
+  min-height: 120px;
+  border: 1px dashed var(--line);
+  border-radius: 8px;
+  color: var(--muted);
+  font-weight: 750;
+}
+
+.dialog-backdrop {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 18px;
+  background: rgba(30, 27, 23, 0.26);
+  z-index: 10;
+}
+
+.dialog-backdrop[hidden],
+.toast[hidden] {
+  display: none;
+}
+
+.dialog {
+  width: min(420px, 100%);
+  display: grid;
+  gap: 16px;
+  padding: 18px;
+}
+
+.dialog-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: calc(18px + env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+  z-index: 20;
+  max-width: min(420px, calc(100% - 32px));
+  border-radius: 8px;
+  background: #22201c;
+  color: #fff;
+  padding: 12px 14px;
+  font-size: 14px;
+  font-weight: 760;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+}
+
+@media (max-width: 760px) {
+  .app-shell {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .summary-band,
+  .entry-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .toolbar {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .toolbar label {
+    grid-column: 1 / -1;
+  }
+
+  .metric-row > div,
+  .balance-card {
+    min-height: 88px;
+    padding: 14px 16px;
+  }
+
+  .balance-card {
+    min-height: 102px;
+  }
+
+  .metric-row > div {
+    align-content: center;
+    gap: 8px;
+  }
+
+  .toolbar button {
+    width: 100%;
+  }
+
+  .entry-panel,
+  .chart-panel,
+  .trend-section,
+  .records-section {
+    padding: 12px;
+  }
+
+  .chart-panel canvas {
+    width: 180px;
+    height: 180px;
+  }
+
+  .trend-section canvas {
+    height: 96px;
+  }
+}
+
+@media (max-width: 420px) {
+  .category-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .two-col,
+  .legend {
+    grid-template-columns: 1fr;
+  }
+
+  .panel-title {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .entry-panel .panel-title {
+    align-items: center;
+    flex-direction: row;
+  }
+
+  .chart-panel .panel-title,
+  .trend-section .panel-title {
+    align-items: center;
+    flex-direction: row;
+  }
+
+  .segmented-control,
+  .actions {
+    width: 100%;
+  }
+
+  .actions button {
+    flex: 1;
+  }
+}
