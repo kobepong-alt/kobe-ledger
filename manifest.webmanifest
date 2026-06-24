@@ -1,0 +1,17 @@
+{
+  "name": "Kobe的账本",
+  "short_name": "Kobe账本",
+  "description": "手机本地可用的离线记账工具",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f7f4ee",
+  "theme_color": "#f7f4ee",
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
