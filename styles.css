@@ -430,7 +430,7 @@ h2 {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   gap: 10px;
-  align-items: center;
+  align-items: start;
   min-height: 66px;
   border: 1px solid var(--line);
   border-radius: 8px;
@@ -440,6 +440,21 @@ h2 {
 
 .record-main {
   min-width: 0;
+}
+
+.record-edit {
+  min-height: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  padding: 0;
+  text-align: left;
+  cursor: pointer;
+}
+
+.record-edit:focus-visible {
+  outline: 3px solid rgba(47, 111, 115, 0.18);
+  outline-offset: 4px;
 }
 
 .record-title {
@@ -461,9 +476,9 @@ h2 {
   color: var(--muted);
   font-size: 12px;
   font-weight: 650;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+  white-space: normal;
 }
 
 .record-amount {
@@ -477,6 +492,12 @@ h2 {
 
 .record-amount.income {
   color: var(--income);
+}
+
+.record-side {
+  display: grid;
+  gap: 6px;
+  justify-items: end;
 }
 
 .record-delete {
