@@ -43,6 +43,14 @@ const els = {
   ledgerForm: document.querySelector("#ledgerForm"),
   ledgerNameInput: document.querySelector("#ledgerNameInput"),
   cancelLedgerButton: document.querySelector("#cancelLedgerButton"),
+  editDialog: document.querySelector("#editDialog"),
+  editForm: document.querySelector("#editForm"),
+  editAmountInput: document.querySelector("#editAmountInput"),
+  editDateInput: document.querySelector("#editDateInput"),
+  editLedgerSelect: document.querySelector("#editLedgerSelect"),
+  editCategorySelect: document.querySelector("#editCategorySelect"),
+  editNoteInput: document.querySelector("#editNoteInput"),
+  cancelEditButton: document.querySelector("#cancelEditButton"),
   toast: document.querySelector("#toast"),
 };
 
@@ -53,6 +61,7 @@ let selectedLedgerId = state.activeLedgerId;
 let toastTimer = 0;
 let lastRenderWidth = window.innerWidth;
 let resizeFrame = 0;
+let editingEntryId = "";
 
 function createInitialState() {
   const ledgerId = makeId();
@@ -293,13 +302,15 @@ function renderRecords() {
       const note = entry.note ? ` · ${entry.note}` : "";
       return `
         <article class="record-card">
-          <div class="record-main">
-            <div class="record-title">
-              <span>${escapeHtml(entry.category)}</span>
+          <button class="record-edit" type="button" data-edit="${entry.id}" aria-label="编辑 ${escapeAttr(entry.category)} ${escapeAttr(entry.date)}">
+            <div class="record-main">
+              <div class="record-title">
+                <span>${escapeHtml(entry.category)}</span>
+              </div>
+              <div class="record-meta">${escapeHtml(entry.date)} · ${escapeHtml(ledger?.name || "账本")}${escapeHtml(note)}</div>
             </div>
-            <div class="record-meta">${escapeHtml(entry.date)} · ${escapeHtml(ledger?.name || "账本")}${escapeHtml(note)}</div>
-          </div>
-          <div>
+          </button>
+          <div class="record-side">
             <div class="record-amount ${amountClass}">${sign}${money(entry.amount)}</div>
             <button class="record-delete" type="button" data-delete="${entry.id}" title="删除记录" aria-label="删除记录">删</button>
           </div>
@@ -307,6 +318,66 @@ function renderRecords() {
       `;
     })
     .join("");
+}
+
+function editLedgerOptions() {
+  return state.ledgers.map((ledger) => `<option value="${ledger.id}">${escapeHtml(ledger.name)}</option>`).join("");
+}
+
+function renderEditCategories(type, selected) {
+  const categories = defaultCategories[type];
+  els.editCategorySelect.innerHTML = categories.map((category) => `<option value="${escapeAttr(category)}">${escapeHtml(category)}</option>`).join("");
+  els.editCategorySelect.value = categories.includes(selected) ? selected : categories[0];
+}
+
+function ledgerTypeById(ledgerId) {
+  return state.ledgers.find((ledger) => ledger.id === ledgerId)?.type === "income" ? "income" : "expense";
+}
+
+function openEditDialog(entryId) {
+  const entry = state.entries.find((item) => item.id === entryId);
+  if (!entry) return;
+  editingEntryId = entry.id;
+  els.editLedgerSelect.innerHTML = editLedgerOptions();
+  els.editLedgerSelect.value = entry.ledgerId;
+  els.editAmountInput.value = entry.amount;
+  els.editDateInput.value = entry.date;
+  els.editNoteInput.value = entry.note || "";
+  renderEditCategories(ledgerTypeById(entry.ledgerId), entry.category);
+  els.editDialog.hidden = false;
+  els.editAmountInput.focus();
+}
+
+function closeEditDialog() {
+  editingEntryId = "";
+  els.editDialog.hidden = true;
+}
+
+function saveEditedEntry(event) {
+  event.preventDefault();
+  const entry = state.entries.find((item) => item.id === editingEntryId);
+  if (!entry) return;
+  const amount = Number(els.editAmountInput.value);
+  if (!Number.isFinite(amount) || amount <= 0) {
+    showToast("请输入有效金额");
+    return;
+  }
+
+  const ledgerId = els.editLedgerSelect.value;
+  const nextType = ledgerTypeById(ledgerId);
+  entry.ledgerId = nextType === "income" ? INCOME_LEDGER_ID : ledgerId;
+  entry.type = nextType;
+  entry.amount = Math.round(amount * 100) / 100;
+  entry.category = els.editCategorySelect.value;
+  entry.date = els.editDateInput.value;
+  entry.note = els.editNoteInput.value.trim();
+  selectedLedgerId = entry.ledgerId;
+  state.activeLedgerId = selectedLedgerId;
+  currentType = nextType;
+  saveState();
+  closeEditDialog();
+  render();
+  showToast("已修改");
 }
 
 function renderCategoryChart() {
@@ -706,9 +777,16 @@ els.categoryGrid.addEventListener("click", (event) => {
 });
 
 els.recordList.addEventListener("click", (event) => {
-  const button = event.target.closest("[data-delete]");
-  if (!button) return;
-  deleteEntry(button.dataset.delete);
+  const deleteButton = event.target.closest("[data-delete]");
+  if (deleteButton) {
+    deleteEntry(deleteButton.dataset.delete);
+    return;
+  }
+
+  const editButton = event.target.closest("[data-edit]");
+  if (editButton) {
+    openEditDialog(editButton.dataset.edit);
+  }
 });
 
 els.newLedgerButton.addEventListener("click", () => {
@@ -729,6 +807,21 @@ els.ledgerDialog.addEventListener("click", (event) => {
 });
 
 els.ledgerForm.addEventListener("submit", createLedger);
+
+els.editLedgerSelect.addEventListener("change", () => {
+  renderEditCategories(ledgerTypeById(els.editLedgerSelect.value), els.editCategorySelect.value);
+});
+
+els.cancelEditButton.addEventListener("click", closeEditDialog);
+
+els.editDialog.addEventListener("click", (event) => {
+  if (event.target === els.editDialog) {
+    closeEditDialog();
+  }
+});
+
+els.editForm.addEventListener("submit", saveEditedEntry);
+
 els.exportCsvButton.addEventListener("click", exportCsv);
 els.exportJsonButton.addEventListener("click", exportJson);
 els.importButton.addEventListener("click", () => els.importInput.click());
