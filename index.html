@@ -18,7 +18,7 @@
         <div>
           <p class="eyebrow">本地记账</p>
           <h1>Kobe的账本</h1>
-          <p class="version-label">v1.12</p>
+          <p class="version-label">v1.14</p>
         </div>
         <button class="icon-button" id="exportJsonButton" type="button" title="导出 JSON" aria-label="导出 JSON">
           <span aria-hidden="true">↓</span>
@@ -139,6 +139,38 @@
           <div class="dialog-actions">
             <button id="cancelLedgerButton" type="button">取消</button>
             <button class="primary-button" type="submit">创建</button>
+          </div>
+        </form>
+      </div>
+
+      <div id="editDialog" class="dialog-backdrop" hidden>
+        <form id="editForm" class="dialog" autocomplete="off">
+          <h2>编辑流水</h2>
+          <label>
+            <span>金额</span>
+            <input id="editAmountInput" type="number" inputmode="decimal" min="0.01" step="0.01" required />
+          </label>
+          <div class="two-col">
+            <label>
+              <span>日期</span>
+              <input id="editDateInput" type="date" required />
+            </label>
+            <label>
+              <span>账本</span>
+              <select id="editLedgerSelect"></select>
+            </label>
+          </div>
+          <label>
+            <span>分类</span>
+            <select id="editCategorySelect"></select>
+          </label>
+          <label>
+            <span>备注</span>
+            <input id="editNoteInput" type="text" maxlength="160" placeholder="备注" />
+          </label>
+          <div class="dialog-actions">
+            <button id="cancelEditButton" type="button">取消</button>
+            <button class="primary-button" type="submit">保存修改</button>
           </div>
         </form>
       </div>
