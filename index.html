@@ -18,7 +18,7 @@
         <div>
           <p class="eyebrow">本地记账</p>
           <h1>Kobe的账本</h1>
-          <p class="version-label">v1.11</p>
+          <p class="version-label">v1.12</p>
         </div>
         <button class="icon-button" id="exportJsonButton" type="button" title="导出 JSON" aria-label="导出 JSON">
           <span aria-hidden="true">↓</span>
@@ -118,9 +118,10 @@
         <section class="records-section" aria-label="流水记录">
           <div class="panel-title">
             <h2>流水</h2>
+            <span id="recordHint">当前账本</span>
             <div class="actions">
-              <button id="exportCsvButton" type="button">导出 CSV</button>
-              <button id="importButton" type="button">导入 JSON</button>
+              <button id="exportCsvButton" type="button">导出全部 CSV</button>
+              <button id="importButton" type="button">导入全部 JSON</button>
             </div>
           </div>
           <input id="importInput" type="file" accept="application/json,.json" hidden />
