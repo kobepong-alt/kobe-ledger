@@ -34,6 +34,7 @@ const els = {
   trendChartHint: document.querySelector("#trendChartHint"),
   chartHint: document.querySelector("#chartHint"),
   recordList: document.querySelector("#recordList"),
+  recordHint: document.querySelector("#recordHint"),
   exportCsvButton: document.querySelector("#exportCsvButton"),
   exportJsonButton: document.querySelector("#exportJsonButton"),
   importButton: document.querySelector("#importButton"),
@@ -278,6 +279,7 @@ function sumEntries(entries) {
 
 function renderRecords() {
   const entries = currentEntries();
+  els.recordHint.textContent = `${selectedLedger()?.name || "当前账本"} · 当前月份`;
   if (!entries.length) {
     els.recordList.innerHTML = `<div class="empty-state">这个月份还没有记录</div>`;
     return;
