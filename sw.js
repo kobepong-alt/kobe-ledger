@@ -1,4 +1,4 @@
-const CACHE_NAME = "local-ledger-pwa-v13";
+const CACHE_NAME = "local-ledger-pwa-v14";
 const ASSETS = ["./", "./index.html", "./styles.css", "./app.js", "./manifest.webmanifest", "./icon.svg"];
 
 self.addEventListener("install", (event) => {
